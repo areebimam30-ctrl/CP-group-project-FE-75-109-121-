@@ -1,2 +1,2 @@
 # CP-group-project-FE-75-109-121-
-Areeb(cs-075), Merub(cs-109), Ahmed(cs-121)
+Areeb(cs-075), Meerab(cs-109), Ahmed(cs-121)
