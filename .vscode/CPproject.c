@@ -4,9 +4,9 @@
 /*............FOOD STRUCTURE.............*/
 struct Food {
     int foodId;
-    int price;
+    float price;
     char name[30];
-    float quantity;
+    int quantity;
 
 };
 /*...........ARRAY OF FOOD ITEMS.............*/
@@ -17,6 +17,10 @@ int itemcount=0;
 void showMainMenu(void);
 void addFood(void);
 void displayFood(void);
+void searchFood(void);
+void updateFood(void);
+void deleteFood(void);
+
 int main(){
     int choice;
     do{
@@ -32,18 +36,26 @@ int main(){
             displayFood();
             break;
             case 3:
+            //searchFood();
+            case 4:
+            //updateFood();
+            case 5:
+            //deleteFood();
+            case 9:
+            printf("Thank you for using this system\n");
+            break;
 
             default:
             printf("invalid choice\n");}
         }
 
 
-        while(choice!= );
+        while(choice!=9 );
         return 0;
     }//will decide later
         void showMainMenu(){
-            printf("===================");
-            printf("CAFETERIA MANAGEMENT SYSTEM");
+            printf("===================\n");
+            printf("CAFETERIA MANAGEMENT SYSTEM\n");
             printf("1. Add Food Item\n");
             printf("2. Display Food Items\n");
             printf("3. Search Food Items\n");
@@ -58,27 +70,28 @@ int main(){
             int i,newid;
             if(itemcount<maxItems){
                 printf("Enter Food ID: \n");
-                scanf("%d",&menu[itemcount].foodId);
+                scanf("%d",&newid);
                 for(i=0;i<itemcount;i++){
                 if(menu[i].foodId==newid){
-            printf("this id already exists");
+            printf("this id already exists\n");
             return;
         }}
+        menu[itemcount].foodId=newid;
                 printf("Enter Food name: \n");
-                scanf("%s",menu[itemcount].name);
+                scanf(" %29[^\n]",menu[itemcount].name);
                 printf("Enter Food price: \n");
-                scanf("%d",&menu[itemcount].price);
+                scanf("%f",&menu[itemcount].price);
                 printf("Enter food quantity: \n");
-                scanf("%f",&menu[itemcount].quantity);
+                scanf("%d",&menu[itemcount].quantity);
                 itemcount++;
-                printf("Item added succesfully");
+                printf("Item added succesfully\n");
              }else{
                 printf("Menu is full. Can't add more items\n");
              }}
              void displayFood(void){
                 int i;
                 if(itemcount==0){
-                printf("No food items present,add some food items first");
+                printf("No food items present,add some food items first\n");
                 return;
             }
             printf("\n----Menu----\n");
@@ -86,7 +99,11 @@ int main(){
     printf("---------------------------------------------\n");
 
     for (i = 0; i < itemcount; i++) {
-        printf("%-5d %-20s %-10.2f %-8d\n",menu[i].foodId,menu[i].name,menu[i].price,menu[i].quantity);
+        printf("%-5d %-20s %-10.2f %-8d\n",
+            menu[i].foodId,
+            menu[i].name,
+            menu[i].price,
+            menu[i].quantity);
     }
 }
             
