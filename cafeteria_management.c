@@ -1,33 +1,41 @@
 #include<stdio.h>
 #include<string.h>
-#define maxItems 100
+#include<stdlib.h>
+#define INITIAL_CAPACITY 5
+#define MENU_FILE "menu.dat"
 /*............FOOD STRUCTURE.............*/
-struct Food {
+typedef struct Food {
     int foodId;
     float price;
     char name[30];
     int quantity;
 
-};
-/*...........ARRAY OF FOOD ITEMS.............*/
-struct Food menu[maxItems];
+} Food;
+/*.......DYNAMIC ARRAY OF FOOD ITEMS.......*/
+Food *menu = NULL;
 int itemcount=0;
+int capacity = 0;
 /*..........FUNCTIONS........*/
-//apne apne functions yahan par declare krwa dena
+
 void showMainMenu(void);
 void addFood(void);
 void displayFood(void);
 void searchFood(void);
 void updateFood(void);
 void deleteFood(void);
+void loadMenu(void);
+void saveMenu(void);
 
 int main(){
+
     int choice;
+    loadMenu();
+    
     do{
         showMainMenu();
         printf("Enter your choice: ");
         scanf("%d",&choice);
-        //incomplete hai yeh abhi
+        
         switch(choice){
             case 1:
             addFood();
@@ -42,6 +50,12 @@ int main(){
             case 5:
             //deleteFood();
             case 9:
+            saveMenu();
+            free(menu);
+           
+            menu=NULL;
+          
+
             printf("Thank you for using this system\n");
             break;
 
@@ -52,7 +66,7 @@ int main(){
 
         while(choice!=9 );
         return 0;
-    }//will decide later
+    }
         void showMainMenu(){
             printf("===================\n");
             printf("CAFETERIA MANAGEMENT SYSTEM\n");
@@ -66,9 +80,60 @@ int main(){
             printf("8.\n");//incomplete
             printf("9. Exit\n");
         }
+        void loadMenu(void){
+    FILE *fp=fopen(MENU_FILE,"rb");
+
+    if(fp==NULL){
+        /* file does not exist yet (first run): start with an empty menu */
+        capacity=INITIAL_CAPACITY;
+        menu=malloc(capacity*sizeof(Food));
+        if(menu==NULL){
+            printf("Memory allocation failed\n");
+            exit(1);
+        }
+        itemcount=0;
+        return;
+    }
+
+    /* first value in the file is the number of items */
+    if(fread(&itemcount,sizeof(int),1,fp)!=1){
+        itemcount=0;
+    }
+
+    capacity=itemcount+INITIAL_CAPACITY;
+    menu=malloc(capacity*sizeof(Food));
+    if(menu==NULL){
+        printf("Memory allocation failed\n");
+        fclose(fp);
+        exit(1);
+    }
+
+    if(itemcount>0){
+        fread(menu,sizeof(Food),itemcount,fp);
+    }
+
+    fclose(fp);
+    printf("%d food items loaded from file\n",itemcount);
+}
+        
+                void saveMenu(void){
+                FILE*fp=fopen(MENU_FILE,"wb");
+                if(fp==NULL){
+                printf("Could not save data to file\n");
+                return;}
+                fwrite(&itemcount,sizeof(int),1,fp);
+                fwrite(menu,sizeof(Food),itemcount,fp);
+                fclose(fp);}
         void addFood(void){
             int i,newid;
-            if(itemcount<maxItems){
+            if(itemcount==capacity){
+            int newCapacity=capacity*2;
+            Food*temp=realloc(menu,newCapacity*sizeof(Food));
+            if(temp==NULL){
+            printf("Memory allocation failed\n");
+            return;}
+            menu=temp;
+            capacity=newCapacity;}
                 printf("Enter Food ID: \n");
                 scanf("%d",&newid);
                 for(i=0;i<itemcount;i++){
@@ -84,10 +149,11 @@ int main(){
                 printf("Enter food quantity: \n");
                 scanf("%d",&menu[itemcount].quantity);
                 itemcount++;
+                saveMenu();
                 printf("Item added succesfully\n");
-             }else{
-                printf("Menu is full. Can't add more items\n");
-             }}
+             }
+    
+        
              void displayFood(void){
                 int i;
                 if(itemcount==0){
