@@ -10,7 +10,7 @@ typedef struct Food {
     char name[30];
     int quantity;
 
-} Food;
+}Food;
 /*.......DYNAMIC ARRAY OF FOOD ITEMS.......*/
 Food *menu = NULL;
 int itemcount=0;
