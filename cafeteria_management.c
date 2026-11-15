@@ -72,10 +72,10 @@ int main(){
             deleteFood();
             break;
             case 6:
-            takeorder();
+            takeOrder();
             break;
             case 7:
-            displayorder();
+            displayOrders();
             break;
             case 9:
                 
