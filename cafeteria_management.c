@@ -16,7 +16,7 @@ Food *menu = NULL;
 int itemcount=0;
 int capacity = 0;
 /*..........FUNCTIONS........*/
-
+int increaseOrderCapacity(int needed);
 void showMainMenu(void);
 void addFood(void);
 void displayFood(void);
@@ -24,12 +24,17 @@ void searchFood(void);
 void updateFood(void);
 void deleteFood(void);
 void loadMenu(void);
+void loadOrders(void);
 void saveMenu(void);
+void takeOrder(void);
+void displayOrders(void);
+
 
 int main(){
 
     int choice;
     loadMenu();
+    loadOrders();
     
     do{
         showMainMenu();
@@ -44,12 +49,22 @@ int main(){
             displayFood();
             break;
             case 3:
-            //searchFood();
+            searchFood();
+            break;
             case 4:
-            //updateFood();
+            updateFood();
+            break;
             case 5:
-            //deleteFood();
+            deleteFood();
+            break;
+            case 6:
+            takeorder();
+            break;
+            case 7:
+            displayorder();
+            break;
             case 9:
+                
             saveMenu();
             free(menu);
            
@@ -75,9 +90,9 @@ int main(){
             printf("3. Search Food Items\n");
             printf("4 Update Food Items\n");
             printf("5. Delete Food Items\n");
-            printf("6.\n");//incomplete
-            printf("7. \n");//incomplete
-            printf("8.\n");//incomplete
+            printf("6. Place your order\n");
+            printf("7. Display previous orders\n");
+            printf("8.\n");
             printf("9. Exit\n");
         }
         void loadMenu(void){
