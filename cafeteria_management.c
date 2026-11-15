@@ -86,11 +86,9 @@ int main(){
           
 
             printf("Thank you for using this system\n");
+                 printf("Program Exited Successfuly");
             break;
-            case 9:
-            printf("\nThank you for using CAFETERIA MANAGEMENT SYSTEM!\n");
-            printf("Program Exited Successfuly");
-            break; 
+            
             default:
             printf("invalid choice\n");
             break;
@@ -203,7 +201,7 @@ int main(){
     printf("---------------------------------------------\n");
 
     for (i = 0; i < itemcount; i++) {
-        printf("%-5d %-20s %-10d %-8.2f\n",menu[i].foodId,
+        printf("%-5d %-20s %-10.2f %-8d\n",menu[i].foodId,
             menu[i].name,
             menu[i].price,
             menu[i].quantity);
