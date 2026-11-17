@@ -114,7 +114,7 @@ int main(){
             printf("9. Exit\n");
         }
         void loadMenu(void){
-    FILE *fp=fopen(MENU_FILE,"rb");
+    FILE *fp=fopen(MENU_FILE,"r");
 
     if(fp==NULL){
         /* file does not exist yet (first run): start with an empty menu */
@@ -150,7 +150,7 @@ int main(){
 }
         
                 void saveMenu(void){
-                FILE*fp=fopen(MENU_FILE,"wb");
+                FILE*fp=fopen(MENU_FILE,"w");
                 if(fp==NULL){
                 printf("Could not save data to file\n");
                 return;}
@@ -244,13 +244,13 @@ void updateFood(void)
         if (menu[i].foodId == id)
         {
             printf("Enter new name: ");
-            scanf("%29s", menu[i].name);
+            scanf("%29[^\n]s", menu[i].name);
 
             printf("Enter new price: ");
-            scanf("%d", &menu[i].price);
+            scanf("%f", &menu[i].price);
 
             printf("Enter new quantity: ");
-            scanf("%f", &menu[i].quantity);
+            scanf("%d", &menu[i].quantity);
 
             printf("Food updated successfully!\n");
             return;
