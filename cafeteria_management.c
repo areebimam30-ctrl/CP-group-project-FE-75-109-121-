@@ -2,7 +2,7 @@
 #include<string.h>
 #include<stdlib.h>
 #define INITIAL_CAPACITY 5
-#define MENU_FILE "menu.dat"
+#define MENU_FILE "menu.txt"
 /*............FOOD STRUCTURE.............*/
 typedef struct Food {
     int foodId;
@@ -129,7 +129,7 @@ int main(){
     }
 
     /* first value in the file is the number of items */
-    if(fread(&itemcount,sizeof(int),1,fp)!=1){
+  if(fscanf(fp, "%d\n", &itemcount)!=1){
         itemcount=0;
     }
 
@@ -141,8 +141,10 @@ int main(){
         exit(1);
     }
 
-    if(itemcount>0){
-        fread(menu,sizeof(Food),itemcount,fp);
+  if(itemcount>0){
+        for(int i = 0; i < itemcount; i++){
+            fscanf(fp, "%d|%d|%29[^|]|%f|%d|%f\n", &menu[i].foodId, &menu[i].quantity, menu[i].name, &menu[i].price, &menu[i].quantity, &menu[i].price);
+        }
     }
 
     fclose(fp);
@@ -154,8 +156,10 @@ int main(){
                 if(fp==NULL){
                 printf("Could not save data to file\n");
                 return;}
-                fwrite(&itemcount,sizeof(int),1,fp);
-                fwrite(menu,sizeof(Food),itemcount,fp);
+                  fprintf(fp, "%d\n", itemcount);
+                for(int i = 0; i < itemcount; i++){
+                    fprintf(fp, "%d|%d|%s|%f|%d|%f\n", menu[i].foodId, menu[i].quantity, menu[i].name, menu[i].price, menu[i].quantity, menu[i].price);
+                }
                 fclose(fp);}
         void addFood(void){
             int i,newid;
@@ -330,7 +334,7 @@ void loadOrders(void)
     orderitem temp;
     int largestid = 0;
 
-    while (fscanf(fp, "%d|%d|%29[^|]|%d|%d|%f",
+    while (fscanf(fp, "%d|%d|%29[^|]|%f|%d|%f\n",
                   &temp.orderid,
                   &temp.item.foodId,
                   temp.item.name,
@@ -351,6 +355,7 @@ void loadOrders(void)
     nextorderid = largestid + 1;
 
     fclose(fp);
+    printf("%d previous orders loaded from file\n", ordercount);
 }
 
 
@@ -368,7 +373,7 @@ int saveOrders(orderitem cart[], int cartcount)
 
     for (int i = 0; i < cartcount; i++)
     {
-        if (fprintf(fp, "%d|%d|%s|%d|%d|%.2f\n",
+        if (fprintf(fp, "%d|%d|%29[^|]|%f|%d|%.2f\n",
                     cart[i].orderid,
                     cart[i].item.foodId,
                     cart[i].item.name,
