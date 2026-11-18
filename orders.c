@@ -75,7 +75,7 @@ void loadOrders(void)
     orderitem temp;
     int largestid = 0;
 
-    while (fscanf(fp, "%d|%d|%29[^|]|%d|%d|%f",
+    while (fscanf(fp, "%d|%d|%29[^|]|%f|%d|%f",
                   &temp.orderid,
                   &temp.item.foodId,
                   temp.item.name,
@@ -96,6 +96,7 @@ void loadOrders(void)
     nextorderid = largestid + 1;
 
     fclose(fp);
+    printf("%d previous orders loaded from file\n", ordercount);
 }
 
 
@@ -113,7 +114,7 @@ int saveOrders(orderitem cart[], int cartcount)
 
     for (int i = 0; i < cartcount; i++)
     {
-        if (fprintf(fp, "%d|%d|%s|%d|%d|%.2f\n",
+        if (fprintf(fp, "%d|%d|%29[^|]|%f|%d|%f\n",
                     cart[i].orderid,
                     cart[i].item.foodId,
                     cart[i].item.name,
