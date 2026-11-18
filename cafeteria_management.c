@@ -248,7 +248,7 @@ void updateFood(void)
         if (menu[i].foodId == id)
         {
             printf("Enter new name: ");
-            scanf("%29[^\n]s", menu[i].name);
+            scanf(" %29[^\n]s", menu[i].name);
 
             printf("Enter new price: ");
             scanf("%f", &menu[i].price);
