@@ -3,6 +3,8 @@
 #include<stdlib.h>
 #define INITIAL_CAPACITY 5
 #define MENU_FILE "menu.txt"
+#define ORDER_FILE "order.txt"
+
 /*............FOOD STRUCTURE.............*/
 typedef struct Food {
     int foodId;
@@ -11,6 +13,7 @@ typedef struct Food {
     int quantity;
 
 }Food;
+
 // STRUCTURE OF ORDER ITEMS
 
 typedef struct {
@@ -23,6 +26,8 @@ typedef struct {
 Food *menu = NULL;
 int itemcount=0;
 int capacity = 0;
+
+/*......DYNAMIC ARRAY OF ORDER ITEMS.....*/
 orderitem *orders = NULL;
 int ordercount = 0;
 int ordercapacity = 0;
@@ -30,16 +35,20 @@ int ordercapacity = 0;
 int nextorderid = 1;
 
 /*..........FUNCTIONS........*/
+//MEMORY FUNCTION
 int increaseOrderCapacity(int needed);
 void showMainMenu(void);
+//FOOD FUNCTIONS
 void addFood(void);
 void displayFood(void);
 void searchFood(void);
 void updateFood(void);
 void deleteFood(void);
+//FILE FUNCTIONS
 void loadMenu(void);
 void loadOrders(void);
 void saveMenu(void);
+//ORDER FUNCTIONS
 void takeOrder(void);
 void displayOrders(void);
 
@@ -77,7 +86,7 @@ int main(){
             case 7:
             displayOrders();
             break;
-            case 9:
+            case 8: //EXIT
                 
             saveMenu();
             free(menu);
@@ -96,7 +105,7 @@ int main(){
         }
 
 
-        while(choice!=9);
+        while(choice!=8);
         return 0;
     }
         void showMainMenu(){
@@ -110,9 +119,10 @@ int main(){
             printf("5. Delete Food Items\n");
             printf("6. Place your order\n");
             printf("7. Display previous orders\n");
-            printf("8.\n");
-            printf("9. Exit\n");
+            printf("8. Exit\n");
         }
+
+//LOAD MENU FORM FILE
         void loadMenu(void){
     FILE *fp=fopen(MENU_FILE,"r");
 
@@ -150,56 +160,62 @@ int main(){
     fclose(fp);
     printf("%d food items loaded from file\n",itemcount);
 }
-        
-                void saveMenu(void){
-                FILE*fp=fopen(MENU_FILE,"w");
-                if(fp==NULL){
-                printf("Could not save data to file\n");
-                return;}
-                  fprintf(fp, "%d\n", itemcount);
-                for(int i = 0; i < itemcount; i++){
-                    fprintf(fp, "%d|%d|%s|%f|%d|%f\n", menu[i].foodId, menu[i].quantity, menu[i].name, menu[i].price, menu[i].quantity, menu[i].price);
+ //SAVE MENU IN FILE       
+void saveMenu(void){
+  FILE*fp=fopen(MENU_FILE,"w");
+     if(fp==NULL){
+      printf("Could not save data to file\n");
+      return;}
+     fprintf(fp, "%d\n", itemcount);
+      for(int i = 0; i < itemcount; i++){
+           fprintf(fp, "%d|%d|%s|%f|%d|%f\n", menu[i].foodId, menu[i].quantity, menu[i].name, menu[i].price, menu[i].quantity, menu[i].price);
                 }
-                fclose(fp);}
-        void addFood(void){
-            int i,newid;
-            if(itemcount==capacity){
-            int newCapacity=capacity*2;
-            Food*temp=realloc(menu,newCapacity*sizeof(Food));
-            if(temp==NULL){
-            printf("Memory allocation failed\n");
-            return;}
-            menu=temp;
-            capacity=newCapacity;}
-                printf("Enter Food ID: \n");
-                scanf("%d",&newid);
-                for(i=0;i<itemcount;i++){
-                if(menu[i].foodId==newid){
+              fclose(fp);
+}
+//ADD FOOD IN MENU
+  void addFood(void){
+      int i,newid;
+      if(itemcount==capacity){
+     int newCapacity=capacity*2;
+     Food*temp=realloc(menu,newCapacity*sizeof(Food));
+     if(temp==NULL){
+     printf("Memory allocation failed\n");
+     return;
+     }
+         menu=temp;
+          capacity=newCapacity;}
+          printf("Enter Food ID: \n");
+          scanf("%d",&newid);
+          for(i=0;i<itemcount;i++){
+          if(menu[i].foodId==newid){
             printf("this id already exists\n");
             return;
-        }}
-        menu[itemcount].foodId=newid;
-                printf("Enter Food name: \n");
-                scanf(" %29[^\n]",menu[itemcount].name);
-                printf("Enter Food price: \n");
-                scanf("%f",&menu[itemcount].price);
-                printf("Enter food quantity: \n");
-                scanf("%d",&menu[itemcount].quantity);
-                itemcount++;
-                saveMenu();
-                printf("Item added succesfully\n");
-             }
+        }
+    }
+       
+      
+      menu[itemcount].foodId=newid;         
+      printf("Enter Food name: \n");       
+      scanf(" %29[^\n]",menu[itemcount].name);
+     printf("Enter Food price: \n");
+      scanf("%f",&menu[itemcount].price);
+      printf("Enter food quantity: \n");
+      scanf("%d",&menu[itemcount].quantity);
+      itemcount++;
+      saveMenu();
+       printf("Item added succesfully\n");
+      }
     
         
-             void displayFood(void){
-                int i;
-                if(itemcount==0){   
-                printf("No food items present,add some food items first");
-                return;
+  void displayFood(void){
+  int i;
+  if(itemcount==0){   
+  printf("No food items present,add some food items first");
+   return;
             }
-            printf("\n----Menu----\n");
-              printf("%-5s %-20s %-10s %-8s \n", "ID",
-                 "Name",
+  printf("\n----Menu----\n");
+   printf("%-5s %-20s %-10s %-8s \n", "ID",
+                  "Name",
                  "Price",
                  "Qty");
     printf("---------------------------------------------\n");
@@ -294,10 +310,10 @@ void deleteFood(void)
 // INCREASE ORDER MEMORY
 
 int increaseOrderCapacity(int needed)
-{
+{   //check if its enough
     if (needed <= ordercapacity)
         return 1;
-
+//get order capacity to allocate memory
     int newcapacity = (ordercapacity == 0) ? 2 : ordercapacity;
 
     while (newcapacity < needed)
@@ -311,18 +327,19 @@ int increaseOrderCapacity(int needed)
         printf("Order memory allocation failed!\n");
         return 0;
     }
+    //save memory address in orders and update capacity
 
     orders = temp;
     ordercapacity = newcapacity;
 
     return 1;
-}
+  }
 
 
-// LOAD PREVIOUS ORDERS
+   // LOAD PREVIOUS ORDERS
 
-void loadOrders(void)
-{
+  void loadOrders(void)
+  {
     FILE *fp = fopen("orders.txt", "r");
 
     if (fp == NULL)
@@ -333,7 +350,7 @@ void loadOrders(void)
 
     orderitem temp;
     int largestid = 0;
-
+   //read all six categories from file
     while (fscanf(fp, "%d|%d|%29[^|]|%f|%d|%f\n",
                   &temp.orderid,
                   &temp.item.foodId,
@@ -351,7 +368,7 @@ void loadOrders(void)
         if (temp.orderid > largestid)
             largestid = temp.orderid;
     }
-
+   //assign next order id
     nextorderid = largestid + 1;
 
     fclose(fp);
@@ -372,7 +389,7 @@ int saveOrders(orderitem cart[], int cartcount)
     }
 
     for (int i = 0; i < cartcount; i++)
-    {
+    {     
         if (fprintf(fp, "%d|%d|%29[^|]|%f|%d|%.2f\n",
                     cart[i].orderid,
                     cart[i].item.foodId,
@@ -380,7 +397,7 @@ int saveOrders(orderitem cart[], int cartcount)
                     cart[i].item.price,
                     cart[i].item.quantity,
                     cart[i].subtotal) < 0)
-        {
+        {  //if the record is not written or any error
             fclose(fp);
             return 0;
         }
@@ -432,13 +449,15 @@ void takeOrder(void)
     {
         printf("\nEnter Food ID to order (0 to finish): ");
 
-        if (scanf("%d", &foodid) != 1)
-        {
-            printf("Invalid input!\n");
-            free(cart);
-            return;
-        }
+      while (scanf("%d", &foodid) != 1)
+{
+    printf("Invalid input! Please enter an integer: ");
 
+    while (getchar() != '\n');
+}
+  //remove the character input
+  while (getchar() != '\n');
+        
         if (foodid == 0)
             break;
 
@@ -454,7 +473,7 @@ void takeOrder(void)
                 break;
             }
         }
-
+       //if item not found
         if (found == -1)
         {
             printf("Food item not found!\n");
@@ -465,10 +484,10 @@ void takeOrder(void)
 
         if (scanf("%d", &quantity) != 1)
         {
-            printf("Invalid input!\n");
-            free(cart);
-            return;
+            printf("Invalid input!\n"); 
+            while (getchar() != '\n'); //character check
         }
+           while (getchar() != '\n');
 
         if (quantity <= 0)
         {
@@ -483,7 +502,7 @@ void takeOrder(void)
         for (int j = 0; j < cartcount; j++)
         {
             if (cart[j].item.foodId == foodid)
-            {
+            {  //add in the quantity if same
                 alreadyOrderedQuantity += cart[j].item.quantity;
             }
         }
@@ -501,7 +520,7 @@ void takeOrder(void)
         if (cartcount == cartcapacity)
         {
             int newcapacity = cartcapacity * 2;
-
+       //reallocate memory for new capacity
             orderitem *temp = realloc(
                 cart, newcapacity * sizeof(orderitem));
 
@@ -511,7 +530,7 @@ void takeOrder(void)
                 free(cart);
                 return;
             }
-
+         //update pointer
             cart = temp;
             cartcapacity = newcapacity;
         }
@@ -522,7 +541,7 @@ void takeOrder(void)
         cart[cartcount].item = menu[found];
 
         cart[cartcount].item.quantity = quantity;
-
+       //calculate the subtotal 
         cart[cartcount].subtotal =
             quantity * menu[found].price;
 
@@ -577,7 +596,7 @@ void takeOrder(void)
     for (int i = 0; i < itemcount; i++)
     {
         int sold = 0;
-
+//find total quantity sold in this order of each item
         for (int j = 0; j < cartcount; j++)
         {
             if (cart[j].item.foodId == menu[i].foodId)
@@ -585,7 +604,7 @@ void takeOrder(void)
                 sold += cart[j].item.quantity;
             }
         }
-
+//decrease the quantity
         menu[i].quantity -= sold;
     }
 
@@ -601,7 +620,7 @@ void takeOrder(void)
     printf("\n========== CUSTOMER BILL ==========\n");
 
     printf("Order ID: %d\n", orderid);
-
+//print all the items with subtotals
     for (int i = 0; i < cartcount; i++)
     {
         printf("%s x %d = Rs. %.2f\n",
@@ -609,7 +628,7 @@ void takeOrder(void)
                cart[i].item.quantity,
                cart[i].subtotal);
     }
-
+   //print the total amount
     printf("-----------------------------------\n");
     printf("Total Bill: Rs. %.2f\n", total);
     printf("Order saved successfully!\n");
@@ -623,7 +642,7 @@ void takeOrder(void)
 // DISPLAY PREVIOUS ORDERS
 
 void displayOrders(void)
-{
+{   //check whether records are available
     if (ordercount == 0)
     {
         printf("No previous orders available!\n");
@@ -631,7 +650,7 @@ void displayOrders(void)
     }
 
     printf("\n----------- ORDER RECORDS -----------\n");
-
+//display all the placed orders 
     for (int i = 0; i < ordercount; i++)
     {
         printf("Order ID: %d | Food: %s | Quantity: %d | Bill: Rs. %.2f\n",
