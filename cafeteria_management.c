@@ -123,10 +123,10 @@ int main(){
         }
 
 //LOAD MENU FORM FILE
-        void loadMenu(void){
+     void loadMenu(void){
     FILE *fp=fopen(MENU_FILE,"r");
 
-    if(fp==NULL){
+     if(fp==NULL){
         /* file does not exist yet (first run): start with an empty menu */
         capacity=INITIAL_CAPACITY;
         menu=malloc(capacity*sizeof(Food));
@@ -153,7 +153,13 @@ int main(){
 
   if(itemcount>0){
         for(int i = 0; i < itemcount; i++){
-            fscanf(fp, "%d|%d|%29[^|]|%f|%d|%f\n", &menu[i].foodId, &menu[i].quantity, menu[i].name, &menu[i].price, &menu[i].quantity, &menu[i].price);
+            fscanf(fp, "%d|%d|%29[^|]|%f|%d|%f\n",
+                &menu[i].foodId, 
+                &menu[i].quantity,
+                menu[i].name, 
+                &menu[i].price, 
+                &menu[i].quantity,
+                &menu[i].price);
         }
     }
 
@@ -168,9 +174,15 @@ void saveMenu(void){
       return;}
      fprintf(fp, "%d\n", itemcount);
       for(int i = 0; i < itemcount; i++){
-           fprintf(fp, "%d|%d|%s|%f|%d|%f\n", menu[i].foodId, menu[i].quantity, menu[i].name, menu[i].price, menu[i].quantity, menu[i].price);
-                }
-              fclose(fp);
+           fprintf(fp, "%d|%d|%s|%f|%d|%f\n", 
+               menu[i].foodId, 
+               menu[i].quantity, 
+               menu[i].name, 
+               menu[i].price, 
+               menu[i].quantity, 
+               menu[i].price);
+         }
+         fclose(fp);
 }
 //ADD FOOD IN MENU
   void addFood(void){
@@ -185,15 +197,24 @@ void saveMenu(void){
          menu=temp;
           capacity=newCapacity;}
           printf("Enter Food ID: \n");
-          scanf("%d",&newid);
-          for(i=0;i<itemcount;i++){
-          if(menu[i].foodId==newid){
+            while (scanf("%d", &newid) != 1)
+    {  //check if the input is integer
+    printf("Invalid input! Please enter an integer: ");
+
+    while (getchar() != '\n');
+   }
+
+   while (getchar() != '\n');
+      
+     //check if food id already exist
+     for(i=0;i<itemcount;i++){
+         if(menu[i].foodId==newid){
             printf("this id already exists\n");
             return;
         }
     }
        
-      
+     //add new food to menu 
       menu[itemcount].foodId=newid;         
       printf("Enter Food name: \n");       
       scanf(" %29[^\n]",menu[itemcount].name);
@@ -235,9 +256,16 @@ void searchFood(void)
     int searchID;
 
     printf("Enter food id to search: ");
-    scanf("%d",&searchID);
+     while (scanf("%d", &searchID) != 1)
+    {
+        printf("Invalid input! Please enter an integer: ");
 
-    int i;
+        while (getchar() != '\n');
+    }
+    while (getchar() != '\n');
+    
+     //search for the food item with the given id
+     int i;
     for(i=0;i<itemcount;i++)
     {
         if(menu[i].foodId==searchID)
@@ -257,8 +285,15 @@ void updateFood(void)
     int id, i;
 
     printf("Enter Food ID to update: ");
-    scanf("%d", &id);
+     while (scanf("%d", &id) != 1)
+    {
+        printf("Invalid input! Please enter an integer: ");
 
+        while (getchar() != '\n');
+    }
+    while (getchar() != '\n');
+    
+   //search for the food item with the given id and update its details
     for (i = 0; i < itemcount; i++)
     {
         if (menu[i].foodId == id)
@@ -287,8 +322,15 @@ void deleteFood(void)
     int id, i, j;
 
     printf("Enter Food ID to delete: ");
-    scanf("%d", &id);
+     while (scanf("%d", &id) != 1)
+    {
+        printf("Invalid input! Please enter an integer: ");
 
+        while (getchar() != '\n');
+    }
+    while (getchar() != '\n');
+
+    //search for the food item with the given id and delete it
     for (i = 0; i < itemcount; i++)
     {
         if (menu[i].foodId == id)
