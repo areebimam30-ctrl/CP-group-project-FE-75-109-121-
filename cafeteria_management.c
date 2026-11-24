@@ -158,7 +158,7 @@ int main(){
                 &menu[i].foodId, 
                 &menu[i].quantity,
                 menu[i].name, 
-                &menu[i].price, 
+                &menu[i].price);
                 
         }
     }
@@ -178,7 +178,7 @@ void saveMenu(void){
                menu[i].foodId, 
                menu[i].quantity, 
                menu[i].name, 
-               menu[i].price, 
+               menu[i].price);
                
          }
          fclose(fp);
