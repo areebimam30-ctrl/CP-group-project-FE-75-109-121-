@@ -179,8 +179,7 @@ void saveMenu(void){
                menu[i].quantity, 
                menu[i].name, 
                menu[i].price, 
-               menu[i].quantity, 
-               menu[i].price);
+               
          }
          fclose(fp);
 }
