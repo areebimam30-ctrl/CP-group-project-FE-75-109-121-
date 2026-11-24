@@ -22,12 +22,12 @@ typedef struct {
     float subtotal;
 } orderitem;
 
-/*.......DYNAMIC ARRAY OF FOOD ITEMS.......*/
+//Global variables
 Food *menu = NULL;
 int itemcount=0;
 int capacity = 0;
 
-/*......DYNAMIC ARRAY OF ORDER ITEMS.....*/
+
 orderitem *orders = NULL;
 int ordercount = 0;
 int ordercapacity = 0;
