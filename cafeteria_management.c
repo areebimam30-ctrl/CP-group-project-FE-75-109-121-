@@ -56,8 +56,9 @@ void displayOrders(void);
 int main(){
 
     int choice;
-    loadMenu();
-    loadOrders();
+    loadMenu();//read previously saved food from menu.txt
+    loadOrders();//read placed orders from order.txt
+    
     
     do{
         showMainMenu();
@@ -158,8 +159,7 @@ int main(){
                 &menu[i].quantity,
                 menu[i].name, 
                 &menu[i].price, 
-                &menu[i].quantity,
-                &menu[i].price);
+                
         }
     }
 
