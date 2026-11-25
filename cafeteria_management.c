@@ -154,11 +154,11 @@ int main(){
 
   if(itemcount>0){
         for(int i = 0; i < itemcount; i++){
-            fscanf(fp, "%d|%d|%29[^|]|%f|%d|%f\n",
+            fscanf(fp, "%d|%29[^|]|%f|%d",
                 &menu[i].foodId, 
-                &menu[i].quantity,
-                menu[i].name, 
-                &menu[i].price);
+                menu[i].name,
+                &menu[i].price, 
+                &menu[i].quantity);
                 
         }
     }
@@ -174,11 +174,11 @@ void saveMenu(void){
       return;}
      fprintf(fp, "%d\n", itemcount);
       for(int i = 0; i < itemcount; i++){
-           fprintf(fp, "%d|%d|%s|%f|%d|%f\n", 
+           fprintf(fp,  "%d|%s|%.2f|%d\n", 
                menu[i].foodId, 
-               menu[i].quantity, 
                menu[i].name, 
-               menu[i].price);
+               menu[i].price, 
+               menu[i].quantity);
                
          }
          fclose(fp);
