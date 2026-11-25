@@ -174,7 +174,7 @@ void saveMenu(void){
       return;}
      fprintf(fp, "%d\n", itemcount);
       for(int i = 0; i < itemcount; i++){
-           fprintf(fp,  "%d|%29[^|]|%.2f|%d\n", 
+           fprintf(fp,  "%d|%s|%.2f|%d\n", 
                menu[i].foodId, 
                menu[i].name, 
                menu[i].price, 
@@ -305,7 +305,7 @@ void updateFood(void)
 
             printf("Enter new quantity: ");
             scanf("%d", &menu[i].quantity);
-            savemenu();
+            saveMenu();
             printf("Food updated successfully!\n");
             return;
         }
@@ -340,7 +340,7 @@ void deleteFood(void)
             }
               
             itemcount--;
-            savemenu();
+            saveMenu();
 
             printf("Food deleted successfully!\n");
             return;
@@ -382,7 +382,7 @@ int increaseOrderCapacity(int needed)
 
   void loadOrders(void)
   {
-    FILE *fp = fopen("orders.txt", "r");
+    FILE *fp = fopen(ORDER_FILE, "r");
 
     if (fp == NULL)
     {
@@ -422,7 +422,7 @@ int increaseOrderCapacity(int needed)
 
 int saveOrders(orderitem cart[], int cartcount)
 {
-    FILE *fp = fopen("orders.txt", "a");
+    FILE *fp = fopen(ORDER_FILE, "a");
 
     if (fp == NULL)
     {
