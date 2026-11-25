@@ -154,7 +154,7 @@ int main(){
 
   if(itemcount>0){
         for(int i = 0; i < itemcount; i++){
-            fscanf(fp, "%d|%29[^|]|%f|%d",
+            fscanf(fp, "%d|%29[^|]|%f|%d\n",
                 &menu[i].foodId, 
                 menu[i].name,
                 &menu[i].price, 
@@ -174,7 +174,7 @@ void saveMenu(void){
       return;}
      fprintf(fp, "%d\n", itemcount);
       for(int i = 0; i < itemcount; i++){
-           fprintf(fp,  "%d|%s|%.2f|%d\n", 
+           fprintf(fp,  "%d|%29[^|]|%.2f|%d\n", 
                menu[i].foodId, 
                menu[i].name, 
                menu[i].price, 
@@ -305,7 +305,7 @@ void updateFood(void)
 
             printf("Enter new quantity: ");
             scanf("%d", &menu[i].quantity);
-
+            savemenu();
             printf("Food updated successfully!\n");
             return;
         }
@@ -338,8 +338,9 @@ void deleteFood(void)
             {
                 menu[j] = menu[j + 1];
             }
-
+              
             itemcount--;
+            savemenu();
 
             printf("Food deleted successfully!\n");
             return;
